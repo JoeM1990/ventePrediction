@@ -42,5 +42,20 @@ Aucune installation de dépendances n'est requise, car le projet utilise des CDN
 3. Le modèle d'apprentissage automatique s'entraînera automatiquement sur vos données et prédira les ventes futures.
 4. Visualisez les prédictions et obtenez des recommandations pour votre stratégie de vente.
 
-## Structure du Projet
+
+## Contributions
+
+Les contributions sont les bienvenues ! Si vous avez des idées pour améliorer cette plateforme ou corriger des bugs, veuillez suivre ces étapes :
+
+1. Fork ce dépôt.
+2. Créez une branche avec votre fonctionnalité ou correction de bug : `git checkout -b ma-nouvelle-fonctionnalite`.
+3. Committez vos changements : `git commit -m 'Ajouter une nouvelle fonctionnalité'`.
+4. Poussez vers la branche : `git push origin ma-nouvelle-fonctionnalite`.
+5. Ouvrez une Pull Request.
+
+## Auteur
+
+Ce projet a été créé par [Joe Monkila](https://github.com/JoeM1990).
+
+
 
