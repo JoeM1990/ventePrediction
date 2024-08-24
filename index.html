@@ -15,14 +15,14 @@
     </div>
 
     <div class="container">
-        <header class="header">
+        <header class="header animate__zoomIn">
             <h1>Tableau de Bord de Prédiction des Ventes</h1>
         </header>
         
         <main>
             <section class="file-upload">
                 <h2>Télécharger les Données de Ventes</h2>
-                <div id="drop-area">
+                <div id="drop-area" class="animate__pulse-on-hover">
                     <p style="margin-bottom: 10px;">Glissez et déposez votre fichier CSV ou JSON ici</p>
                     <input type="file" id="fileElem" accept=".csv, .json" onchange="handleFiles(this.files)">
                     <label class="button" for="fileElem" style="margin-top: 10px;">Choisissez un fichier</label>
@@ -31,14 +31,14 @@
 
             <section class="sales-prediction">
                 <h2>Prédictions de Ventes</h2>
-                <div id="sales-chart-container">
+                <div id="sales-chart-container" class="animate__fadeIn">
                     <canvas id="sales-chart"></canvas>
                 </div>
             </section>
 
             <section class="recommendations">
                 <h2>Recommandations</h2>
-                <div id="recommendations-list"></div>
+                <div id="recommendations-list" class="animate__fadeInUp"></div>
             </section>
         </main>
     </div>
