@@ -59,13 +59,13 @@ main {
 }
 
 #drop-area {
-    border: 2px dashed #007bff;
+    /* border: 2px dashed #007bff;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
     margin-top: 10px;
     transition: background-color 0.3s ease;
-    animation: wiggle 1.5s infinite;
+    animation: wiggle 1.5s infinite; */
 }
 
 @keyframes wiggle {
