@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/style.css">
     <title>Prédiction des Ventes - Supermarché</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div class="navbar">
+        <img src="assets/user.jpg" class="login-icon" alt="Login" onclick="openModal()"> 
+    </div>
+
     <div class="container">
         <header class="header">
             <h1>Tableau de Bord de Prédiction des Ventes</h1>
@@ -19,9 +23,9 @@
             <section class="file-upload">
                 <h2>Télécharger les Données de Ventes</h2>
                 <div id="drop-area">
-                    <p>Glissez et déposez votre fichier CSV ou JSON ici</p>
+                    <p style="margin-bottom: 10px;">Glissez et déposez votre fichier CSV ou JSON ici</p>
                     <input type="file" id="fileElem" accept=".csv, .json" onchange="handleFiles(this.files)">
-                    <label class="button" for="fileElem">Choisissez un fichier</label>
+                    <label class="button" for="fileElem" style="margin-top: 10px;">Choisissez un fichier</label>
                 </div>
             </section>
 
@@ -37,6 +41,16 @@
                 <div id="recommendations-list"></div>
             </section>
         </main>
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="color: #28a745;">Informations sur l'application</h2>
+            <p>Cet outil vous permet de collecter des données sur la fertilité du sol et de prédire la qualité du sol basé sur les mesures saisies.</p>
+            <p>Utilisez les champs ci-dessus pour entrer les données du sol, puis cliquez sur "Soumettre" pour voir la prédiction.</p> <br>
+            <p>By Joe MONKILA</p>
+        </div>
     </div>
 
     <script src="scripts.js"></script>
