@@ -1,11 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Prédiction des Ventes - Supermarché</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    
+    <div class="container">
+        <header class="header">
+            <h1>Tableau de Bord de Prédiction des Ventes</h1>
+        </header>
+        
+        <main>
+            <section class="file-upload">
+                <h2>Télécharger les Données de Ventes</h2>
+                <div id="drop-area">
+                    <p>Glissez et déposez votre fichier CSV ou JSON ici</p>
+                    <input type="file" id="fileElem" accept=".csv, .json" onchange="handleFiles(this.files)">
+                    <label class="button" for="fileElem">Choisissez un fichier</label>
+                </div>
+            </section>
+
+            <section class="sales-prediction">
+                <h2>Prédictions de Ventes</h2>
+                <div id="sales-chart-container">
+                    <canvas id="sales-chart"></canvas>
+                </div>
+            </section>
+
+            <section class="recommendations">
+                <h2>Recommandations</h2>
+                <div id="recommendations-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
