@@ -6,8 +6,6 @@ function closeModal() {
     document.getElementById("infoModal").style.display = "none";
 }
 
-// scripts.js
-
 document.addEventListener('DOMContentLoaded', function () {
     let model;
 
@@ -138,6 +136,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Attacher les événements nécessaires
     window.handleFiles = handleFiles;
 });
