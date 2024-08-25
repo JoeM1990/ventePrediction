@@ -8,105 +8,136 @@ function closeModal() {
 
 // scripts.js
 
-document.addEventListener("DOMContentLoaded", function() {
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('fileElem');
+document.addEventListener('DOMContentLoaded', function () {
+    let model;
 
-    // Empêcher le comportement par défaut des événements de drag and drop
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    // Mettre en évidence la zone de drop au survol
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.classList.add('highlight');
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.classList.remove('highlight');
-    });
-
-    // Gérer les fichiers déposés
-    dropArea.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-
-        handleFiles(files);
-    }
-
+    // Fonction pour gérer les fichiers téléchargés
     function handleFiles(files) {
-        [...files].forEach(processFile);
-    }
-
-    function processFile(file) {
+        if (files.length === 0) return;
+        const file = files[0];
         const reader = new FileReader();
-        reader.onload = function(event) {
-            const fileContent = event.target.result;
-            let salesData;
-            
-            if (file.type === 'application/json') {
-                salesData = JSON.parse(fileContent);
-            } else if (file.type === 'text/csv') {
-                salesData = parseCSV(fileContent);
+
+        reader.onload = function (event) {
+            const data = event.target.result;
+            const parsedData = parseData(data, file.type);
+            if (parsedData) {
+                trainModel(parsedData);
             }
-            
-            trainAndPredict(salesData);
         };
+
         reader.readAsText(file);
     }
 
-    // Fonction pour analyser le CSV
-   
-
-    // Fonction d'entraînement et de prédiction
-    function trainAndPredict(data) {
-        // Code d'entraînement TensorFlow.js ici
-        // Code de prédiction ici
-
-        // Code d'affichage des résultats ici
-        updateChart(predictions);
-        updateRecommendations(predictions);
+    // Fonction de parsing des données CSV ou JSON
+    function parseData(data, type) {
+        let parsedData;
+        if (type === 'application/json') {
+            parsedData = JSON.parse(data);
+        } else if (type === 'text/csv') {
+            parsedData = parseCSV(data);
+        } else {
+            alert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
+            return null;
+        }
+        return parsedData;
     }
 
-    // Mettre à jour le graphique
-    function updateChart(predictions) {
+    // Parsing CSV
+    function parseCSV(data) {
+        const lines = data.split('\n');
+        const result = [];
+        for (let i = 1; i < lines.length; i++) {
+            const row = lines[i].split(',');
+            if (row.length === 2) {
+                result.push({ date: row[0], sales: parseFloat(row[1]) });
+            }
+        }
+        return result;
+    }
+
+    // Préparer les données pour TensorFlow.js
+    function prepareData(data) {
+        const dates = [];
+        const sales = [];
+
+        data.forEach(record => {
+            dates.push(new Date(record.date).getTime());
+            sales.push(record.sales);
+        });
+
+        const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
+        const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
+
+        return { tensorDates, tensorSales };
+    }
+
+    // Entraînement du modèle TensorFlow.js
+    async function trainModel(data) {
+        const { tensorDates, tensorSales } = prepareData(data);
+
+        model = tf.sequential();
+        model.add(tf.layers.dense({ inputShape: [1], units: 1 }));
+
+        model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
+
+        await model.fit(tensorDates, tensorSales, { epochs: 100 });
+
+        alert('Modèle entraîné avec succès !');
+        makePredictions(data);
+    }
+
+    // Fonction de prédiction des ventes
+    function makePredictions(data) {
+        const predictions = [];
+        const { tensorDates } = prepareData(data);
+
+        const predictedSales = model.predict(tensorDates);
+        predictedSales.dataSync().forEach((pred, index) => {
+            predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
+        });
+
+        displayResults(predictions);
+        generateRecommendations(predictions);
+    }
+
+    // Affichage des résultats avec Chart.js
+    function displayResults(predictions) {
         const ctx = document.getElementById('sales-chart').getContext('2d');
+        const labels = predictions.map(p => p.date);
+        const salesData = predictions.map(p => p.sales);
+
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: predictions.map(p => p.date),
+                labels: labels,
                 datasets: [{
                     label: 'Prédictions de Ventes',
-                    data: predictions.map(p => p.sales),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
+                    data: salesData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
                 }]
             }
         });
+
+        document.getElementById('results-section').classList.remove('hidden');
     }
 
-    // Mettre à jour les recommandations
-    function updateRecommendations(predictions) {
-        const recommendationsList = document.getElementById('recommendations-list');
-        recommendationsList.innerHTML = '';  // Clear previous recommendations
+    // Génération de recommandations
+    function generateRecommendations(predictions) {
+        const recommendations = document.getElementById('recommendations-list');
+        recommendations.innerHTML = '';
 
-        // Exemple de génération de recommandations
-        const avgSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
-        const recommendationText = avgSales > 500 ? 
-            "Considérez une promotion pour stimuler encore plus les ventes!" :
-            "Réduisez l'inventaire pour éviter un surstockage.";
+        const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
 
-        const item = document.createElement('div');
-        item.className = 'recommendation-item animate__fadeInUp';
-        item.textContent = recommendationText;
-        recommendationsList.appendChild(item);
+        if (averageSales < 1000) {
+            recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
+        } else {
+            recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
+        }
     }
+
+    // Attacher les événements nécessaires
+    window.handleFiles = handleFiles;
 });
