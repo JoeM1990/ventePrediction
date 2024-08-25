@@ -63,19 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Fonction pour analyser le CSV
-    function parseCSV(data) {
-        const parsedData = [];
-        const rows = data.split('\n');
-        
-        for (let i = 1; i < rows.length; i++) {  // Ignorer l'en-tête
-            const values = rows[i].split(',');
-            const date = values[0];
-            const sales = parseFloat(values[1]);
-            parsedData.push({ date, sales });
-        }
-        
-        return parsedData;
-    }
+   
 
     // Fonction d'entraînement et de prédiction
     function trainAndPredict(data) {
