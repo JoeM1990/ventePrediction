@@ -34,7 +34,14 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (type === 'text/csv') {
             parsedData = parseCSV(data);
         } else {
-            alert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
+            //alert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
+            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
+            document.getElementById("messageModal").style.display = "block";
+
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
+
             return null;
         }
         return parsedData;
@@ -80,7 +87,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
-        alert('Modèle entraîné avec succès !');
+        document.getElementById('infos-message').textContent = "Modèle entraîné avec succès";
+        document.getElementById("messageModal").style.display = "block";
+
+        setTimeout(function() {
+            document.getElementById("messageModal").style.display = "none";
+        }, 2000);
+
+        //alert('Modèle entraîné avec succès !');
         makePredictions(data);
     }
 
