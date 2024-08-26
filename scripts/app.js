@@ -234,7 +234,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
         console.log(averageSales);
-
         
         recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
 
