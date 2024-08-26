@@ -187,9 +187,9 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 scales: {
                     x: {
-                        type: 'time', // Assurez-vous que l'adaptateur de temps est inclus
+                        type: 'time', 
                         time: {
-                            unit: 'day', // Ajustez l'unité de temps comme nécessaire
+                            unit: 'day', 
                         },
                         title: {
                             display: true,
