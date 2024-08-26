@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function parseCSV(data) {
         const lines = data.split('\n');
         const result = [];
-        const headers = lines[0].split(',');  // Headers: date, product_name, category, sales
+        const headers = lines[0].split(',');
     
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
-            if (row.length === 4) {  // Assure que chaque ligne a 4 colonnes
+            if (row.length === headers.length) {
                 result.push({
                     date: row[0],
-                    product_name: row[1],
-                    category: row[2],
+                    category: row[1],
+                    product: row[2],
                     sales: parseFloat(row[3])
                 });
             }
