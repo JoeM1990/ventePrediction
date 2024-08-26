@@ -1,3 +1,5 @@
+/* Author: Jonathan Monkila */
+
 function openModal() {
     document.getElementById("infoModal").style.display = "block";
 }
