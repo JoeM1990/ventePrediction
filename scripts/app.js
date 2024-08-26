@@ -142,9 +142,14 @@ document.addEventListener('DOMContentLoaded', function () {
         predictedSales.data().then(predictedValues => {
             console.log("Predicted Values: ", predictedValues);
     
-            predictedValues.forEach((pred, index) => {
-                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
-            });
+            if (predictedValues.some(isNaN)) {
+                console.error('Des valeurs NaN ont été détectées dans les prédictions.');
+            }
+    
+            predictions = predictedValues.map((pred, index) => ({
+                date: new Date(data[index].date).toLocaleDateString(),
+                sales: pred
+            }));
     
             displayResults(predictions);
             generateRecommendations(predictions);
@@ -152,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Erreur lors de la prédiction:', error);
         });
     }
+    
     
     
 
