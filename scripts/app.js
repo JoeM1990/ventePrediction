@@ -138,18 +138,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const { tensorDates } = prepareData(data);
     
         const predictedSales = model.predict(tensorDates);
-        const predictedValues = predictedSales.dataSync();
     
-        // Vérification des données prédictives
-        console.log("Predicted Values: ", predictedValues);
+        predictedSales.data().then(predictedValues => {
+            console.log("Predicted Values: ", predictedValues);
     
-        predictedValues.forEach((pred, index) => {
-            predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
+            predictedValues.forEach((pred, index) => {
+                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
+            });
+    
+            displayResults(predictions);
+            generateRecommendations(predictions);
+        }).catch(error => {
+            console.error('Erreur lors de la prédiction:', error);
         });
-    
-        displayResults(predictions);
-        generateRecommendations(predictions);
     }
+    
     
 
     // Affichage des résultats avec Chart.js
