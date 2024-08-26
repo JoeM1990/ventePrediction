@@ -40,15 +40,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const row = lines[i].split(',');
 
             if (row.length === 4) {
-                const date = row[0].trim();
+                const date = new Date(row[0].trim());
                 const category = row[1].trim();
                 const product = row[2].trim();
                 const sales = parseFloat(row[3].trim());
 
-                if (!isNaN(sales)) {
+                if (!isNaN(date.getTime()) && !isNaN(sales)) {
                     result.push({ date, category, product, sales });
                 } else {
-                    console.warn(`Valeur de vente invalide détectée dans la ligne ${i + 1}: `, row);
+                    console.warn(`Données invalides détectées dans la ligne ${i + 1}: `, row);
                 }
             } else {
                 console.warn(`Ligne mal formatée détectée à la ligne ${i + 1}: `, row);
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         data.forEach(record => {
             const date = new Date(record.date);
             if (!isNaN(date.getTime()) && !isNaN(record.sales)) {
-                dates.push(date.getTime());
+                dates.push(date.getTime() / (1000 * 60 * 60 * 24)); // Convertir en jours
                 sales.push(record.sales);
             } else {
                 console.warn("Données invalides détectées :", record);
@@ -77,12 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
             return null;
         }
 
-        // Normalisation des dates pour que les valeurs soient plus petites
-        const tensorDates = tf.tensor2d(dates.map(d => d / (1000 * 60 * 60 * 24)), [dates.length, 1], 'float32');
+        const tensorDates = tf.tensor2d(dates, [dates.length, 1], 'float32');
         const tensorSales = tf.tensor2d(sales, [sales.length, 1], 'float32');
-
-        console.log("Tensor Dates: ", tensorDates.arraySync());
-        console.log("Tensor Sales: ", tensorSales.arraySync());
 
         return { tensorDates, tensorSales };
     }
@@ -118,12 +114,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const { tensorDates } = preparedData;
         const predictions = model.predict(tensorDates);
 
-        predictions.data().then(predictedValues => {
+        predictions.array().then(predictedValues => {
             console.log("Predicted Values: ", predictedValues);
 
             const results = data.map((record, index) => ({
                 date: new Date(record.date).toLocaleDateString(),
-                sales: predictedValues[index]
+                sales: predictedValues[index][0] // Extraire la valeur du tableau
             }));
 
             displayResults(results);
@@ -154,9 +150,9 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 scales: {
                     x: {
-                        type: 'time', 
+                        type: 'time',
                         time: {
-                            unit: 'day', 
+                            unit: 'day',
                         },
                         title: {
                             display: true,
@@ -187,7 +183,6 @@ document.addEventListener('DOMContentLoaded', function () {
         recommendations.innerHTML = '';
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
-        console.log(averageSales);
 
         recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
 
