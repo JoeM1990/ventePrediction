@@ -10,23 +10,42 @@ document.addEventListener('DOMContentLoaded', function () {
     let model;
 
     // Fonction de parsing des données CSV ou JSON
-    function parseData(data, type) {
-        let parsedData;
-        if (type === 'application/json') {
-            parsedData = JSON.parse(data);
-        } else if (type === 'text/csv') {
-            parsedData = parseCSV(data);
-        } else {
-            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
-            document.getElementById("messageModal").style.display = "block";
+    // function parseData(data, type) {
+    //     let parsedData;
+    //     if (type === 'application/json') {
+    //         parsedData = JSON.parse(data);
+    //     } else if (type === 'text/csv') {
+    //         parsedData = parseCSV(data);
+    //     } else {
+    //         document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
+    //         document.getElementById("messageModal").style.display = "block";
 
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+    //         setTimeout(function() {
+    //             document.getElementById("messageModal").style.display = "none";
+    //         }, 2000);
 
-            return null;
+    //         return null;
+    //     }
+    //     return parsedData;
+    // }
+
+    function parseCSV(data) {
+        const lines = data.split('\n');
+        const result = [];
+        const headers = lines[0].split(',');  // Headers: date, product_name, category, sales
+    
+        for (let i = 1; i < lines.length; i++) {
+            const row = lines[i].split(',');
+            if (row.length === 4) {  // Assure que chaque ligne a 4 colonnes
+                result.push({
+                    date: row[0],
+                    product_name: row[1],
+                    category: row[2],
+                    sales: parseFloat(row[3])
+                });
+            }
         }
-        return parsedData;
+        return result;
     }
 
     // Fonction pour gérer les fichiers téléchargés
