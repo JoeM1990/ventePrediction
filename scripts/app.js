@@ -140,15 +140,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const recommendations = document.getElementById('recommendations-list');
     recommendations.innerHTML = '';
 
+    // Afficher les prédictions pour débogage
+    console.log('Prédictions:', predictions);
+
+    // Calcul des ventes moyennes
     const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
+    
+    // Afficher la moyenne des ventes pour débogage
+    console.log('Ventes moyennes prévues:', averageSales);
+
     recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
 
+    // Logique de recommandation basée sur la moyenne des ventes
     if (averageSales < 1000) {
         recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
     } else {
         recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
     }
-}
+    }
+
 
 
     window.handleFiles = handleFiles;
