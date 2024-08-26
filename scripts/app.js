@@ -50,35 +50,43 @@ document.addEventListener('DOMContentLoaded', function () {
     function parseCSV(data) {
         const lines = data.split('\n');
         const result = [];
-        const headers = lines[0].split(',');
-
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
-            if (row.length === headers.length) {
-                result.push({
-                    date: row[0],
-                    category: row[1],
-                    product: row[2],
-                    sales: parseFloat(row[3])
-                });
+            if (row.length === 4) { // Assurez-vous qu'il y a 4 colonnes (Date, Category, Product, Sales)
+                const date = row[0].trim();
+                const sales = parseFloat(row[3].trim()); // Convertir la valeur des ventes en nombre
+                if (!isNaN(sales)) { // Vérifiez que les ventes sont bien un nombre
+                    result.push({ date: date, sales: sales });
+                } else {
+                    console.warn(`La ligne ${i} contient une valeur de vente invalide: ${row[3]}`);
+                }
             }
         }
         return result;
     }
 
+
     // Préparer les données pour TensorFlow.js
     function prepareData(data) {
         const dates = [];
         const sales = [];
-
+    
         data.forEach(record => {
-            dates.push(new Date(record.date).getTime());
-            sales.push(record.sales);
+            const date = new Date(record.date);
+            if (!isNaN(date.getTime()) && !isNaN(record.sales)) {
+                dates.push(date.getTime());
+                sales.push(record.sales);
+            } else {
+                console.warn("Données invalides détectées :", record);
+            }
         });
-
+    
         const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
         const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
-
+    
+        console.log("Tensor Dates: ", tensorDates.arraySync());
+        console.log("Tensor Sales: ", tensorSales.arraySync());
+    
         return { tensorDates, tensorSales };
     }
 
@@ -110,6 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const predictedSales = model.predict(tensorDates);
 
+       
+
         predictedSales.data().then(predictedValues => {
             predictedValues.forEach((pred, index) => {
                 predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
@@ -117,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             displayResults(predictions);
             generateRecommendations(predictions);
+            console.log(predictions);
         }).catch(error => {
             console.error('Erreur lors de la prédiction:', error);
         });
@@ -179,7 +190,8 @@ document.addEventListener('DOMContentLoaded', function () {
         recommendations.innerHTML = '';
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
-        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
+        console.log(averageSales);
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales}</p>`;
 
         if (averageSales < 1000) {
             recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
