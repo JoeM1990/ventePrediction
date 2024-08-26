@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     
         if (dates.length === 0 || sales.length === 0) {
-            console.error("Aucune donnée valide trouvée après la préparation des données.");
+            showAlert('Aucune donnée valide trouvée après la préparation des données.');
             return null;
         }
     
@@ -114,12 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
-        document.getElementById('infos-message').textContent = "Modèle entraîné avec succès";
-        document.getElementById("messageModal").style.display = "block";
-
-        setTimeout(function() {
-            document.getElementById("messageModal").style.display = "none";
-        }, 2000);
+        showAlert('Modèle entraîné avec succès');
 
         makePredictions(data);
     }
