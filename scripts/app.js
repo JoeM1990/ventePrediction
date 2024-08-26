@@ -155,26 +155,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Génération de recommandations
     function generateRecommendations(predictions) {
-    const recommendations = document.getElementById('recommendations-list');
-    recommendations.innerHTML = '';
-
-    // Afficher les prédictions pour débogage
-    console.log('Prédictions:', predictions);
-
-    // Calcul des ventes moyennes
-    const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
+        const recommendations = document.getElementById('recommendations-list');
+        recommendations.innerHTML = '';
     
-    // Afficher la moyenne des ventes pour débogage
-    console.log('Ventes moyennes prévues:', averageSales);
-
-    recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
-
-    // Logique de recommandation basée sur la moyenne des ventes
-    if (averageSales < 1000) {
-        recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
-    } else {
-        recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
-    }
+        const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
+    
+        const salesByCategory = {};
+        predictions.forEach(p => {
+            if (!salesByCategory[p.category]) {
+                salesByCategory[p.category] = [];
+            }
+            salesByCategory[p.category].push(p.sales);
+        });
+    
+        for (const category in salesByCategory) {
+            const avgCategorySales = salesByCategory[category].reduce((sum, sales) => sum + sales, 0) / salesByCategory[category].length;
+            recommendations.innerHTML += `<p>Catégorie ${category}: Ventes moyennes prévues: ${avgCategorySales.toFixed(2)}</p>`;
+            
+            if (avgCategorySales < 800) {
+                recommendations.innerHTML += `<p>Recommandation pour la catégorie ${category}: Considérez une promotion pour augmenter les ventes.</p>`;
+            } else {
+                recommendations.innerHTML += `<p>Recommandation pour la catégorie ${category}: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
+            }
+        }
     }
 
 
