@@ -37,12 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (type === 'text/csv') {
             parsedData = parseCSV(data);
         } else {
-            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
-            document.getElementById("messageModal").style.display = "block";
-
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+           showAlert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
 
             return null;
         }
@@ -241,6 +236,15 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
         }
+    }
+
+    function showAlert(message) {
+        document.getElementById('infos-message').textContent = message;
+        document.getElementById("messageModal").style.display = "block";
+
+        setTimeout(function() {
+            document.getElementById("messageModal").style.display = "none";
+        }, 2000);
     }
 
     window.handleFiles = handleFiles;
