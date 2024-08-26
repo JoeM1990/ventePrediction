@@ -137,18 +137,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Génération de recommandations
     function generateRecommendations(predictions) {
-        const recommendations = document.getElementById('recommendations-list');
-        recommendations.innerHTML = '';
+    const recommendations = document.getElementById('recommendations-list');
+    recommendations.innerHTML = '';
 
-        const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
-        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
+    const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
+    recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
 
-        if (averageSales < 1000) {
-            recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
-        } else {
-            recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
-        }
+    if (averageSales < 1000) {
+        recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
+    } else {
+        recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
     }
+}
+
 
     window.handleFiles = handleFiles;
 });
