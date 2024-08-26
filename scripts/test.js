@@ -26,26 +26,39 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (type === 'text/csv') {
             parsedData = parseCSV(data);
         } else {
-            alert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
+            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
+            document.getElementById("messageModal").style.display = "block";
+
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
+
             return null;
         }
         return parsedData;
     }
 
-    // Parsing CSV
+    // Fonction pour parser les données CSV
     function parseCSV(data) {
         const lines = data.split('\n');
         const result = [];
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
+
             if (row.length === 4) {
-                const date = row[0];
-                const category = row[1];
-                const product = row[2];
-                const sales = parseFloat(row[3]);
+                const date = row[0].trim();
+                const category = row[1].trim();
+                const product = row[2].trim();
+                const sales = parseFloat(row[3].trim()); // Utiliser parseFloat pour les valeurs de vente
+
+                // Vérifiez si les ventes sont bien un nombre
                 if (!isNaN(sales)) {
                     result.push({ date, category, product, sales });
+                } else {
+                    console.warn(`Valeur de vente invalide détectée dans la ligne ${i + 1}: `, row);
                 }
+            } else {
+                console.warn(`Ligne mal formatée détectée à la ligne ${i + 1}: `, row);
             }
         }
         return result;
@@ -57,10 +70,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const sales = [];
 
         data.forEach(record => {
-            const date = new Date(record.date).getTime();
-            if (!isNaN(date) && !isNaN(record.sales)) {
-                dates.push(date);
+            const date = new Date(record.date);
+            if (!isNaN(date.getTime()) && !isNaN(record.sales)) {
+                dates.push(date.getTime());
                 sales.push(record.sales);
+            } else {
+                console.warn("Données invalides détectées :", record);
             }
         });
 
@@ -80,10 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Entraînement du modèle TensorFlow.js
     async function trainModel(data) {
-        const preparedData = prepareData(data);
-        if (!preparedData) return;
-
-        const { tensorDates, tensorSales } = preparedData;
+        const { tensorDates, tensorSales } = prepareData(data);
 
         model = tf.sequential();
         model.add(tf.layers.dense({ inputShape: [1], units: 1 }));
@@ -92,7 +104,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
-        console.log('Modèle entraîné avec succès');
+        document.getElementById('infos-message').textContent = "Modèle entraîné avec succès";
+        document.getElementById("messageModal").style.display = "block";
+
+        setTimeout(function() {
+            document.getElementById("messageModal").style.display = "none";
+        }, 2000);
+
         makePredictions(data);
     }
 
@@ -100,30 +118,35 @@ document.addEventListener('DOMContentLoaded', function () {
     function makePredictions(data) {
         const preparedData = prepareData(data);
         if (!preparedData) {
-            console.error('Les données préparées sont invalides.');
+            document.getElementById('infos-message').textContent = "Les données préparées sont invalides.";
+            document.getElementById("messageModal").style.display = "block";
+
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
             return;
         }
 
         const { tensorDates } = preparedData;
-        const predictedSales = model.predict(tensorDates);
+        const predictions = model.predict(tensorDates);
 
-        predictedSales.data().then(predictedValues => {
-            const predictions = predictedValues.map((pred, index) => ({
-                date: new Date(data[index].date).toLocaleDateString(),
-                sales: pred
+        predictions.data().then(predictedValues => {
+            console.log("Predicted Values: ", predictedValues);
+
+            const results = data.map((record, index) => ({
+                date: new Date(record.date).toLocaleDateString(),
+                sales: predictedValues[index]
             }));
 
-            console.log("Predicted Values: ", predictedValues);
-            
-            if (predictions.some(p => isNaN(p.sales))) {
-                console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-                return;
-            }
-
-            displayResults(predictions);
-            generateRecommendations(predictions);
+            displayResults(results);
+            generateRecommendations(results);
         }).catch(error => {
-            console.error('Erreur lors de la prédiction:', error);
+            document.getElementById('infos-message').textContent = "Erreur lors de la prédiction: " + error;
+            document.getElementById("messageModal").style.display = "block";
+
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
         });
     }
 
@@ -144,10 +167,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     borderWidth: 2,
                     fill: false
                 }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time', 
+                        time: {
+                            unit: 'day', 
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Ventes'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
             }
         });
-
-        document.getElementById('results-section').classList.remove('hidden');
     }
 
     // Génération de recommandations
@@ -156,7 +204,9 @@ document.addEventListener('DOMContentLoaded', function () {
         recommendations.innerHTML = '';
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
-        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales.toFixed(2)}</p>`;
+        console.log(averageSales);
+
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
 
         if (averageSales < 1000) {
             recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;

@@ -226,7 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // document.getElementById('results-section').classList.remove('hidden');
     }
     
-
     // Génération de recommandations
     function generateRecommendations(predictions) {
         const recommendations = document.getElementById('recommendations-list');
