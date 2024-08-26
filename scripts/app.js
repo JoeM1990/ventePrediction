@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const labels = predictions.map(p => p.date);
         const salesData = predictions.map(p => p.sales);
 
+        
         new Chart(ctx, {
             type: 'line',
             data: {
