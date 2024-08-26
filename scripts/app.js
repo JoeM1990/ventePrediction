@@ -147,11 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
                  });
             });
     
-            if (predictions.some(p => isNaN(p.sales))) {
-                // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-                showAlert("Des valeurs NaN ont été détectées dans les prédictions");
-                return;
-            }
+            // if (predictions.some(p => isNaN(p.sales))) {
+            //     // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+            //     showAlert("Des valeurs NaN ont été détectées dans les prédictions");
+            //     return;
+            // }
     
             displayResults(predictions);
             generateRecommendations(predictions);
