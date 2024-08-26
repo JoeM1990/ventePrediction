@@ -167,7 +167,12 @@ document.addEventListener('DOMContentLoaded', function () {
             displayResults(predictions);
             generateRecommendations(predictions);
         }).catch(error => {
-            console.error('Erreur lors de la prédiction:', error);
+            document.getElementById('infos-message').textContent = "Erreur lors de la prédiction:" +error;
+            document.getElementById("messageModal").style.display = "block";
+    
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
         });
     }
 
