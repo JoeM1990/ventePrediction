@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         return { tensorDates, tensorSales };
     }
+    
 
     // Entraînement du modèle TensorFlow.js
     async function trainModel(data) {
