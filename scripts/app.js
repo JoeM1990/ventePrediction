@@ -86,8 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const sales = [];
     
         data.forEach(record => {
-            dates.push(new Date(record.date).getTime());
-            sales.push(record.sales);
+            const date = new Date(record.date).getTime();
+            if (!isNaN(date) && !isNaN(record.sales)) {
+                dates.push(date);
+                sales.push(record.sales);
+            }
         });
     
         const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
@@ -95,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         return { tensorDates, tensorSales };
     }
+    
 
     // Entraînement du modèle TensorFlow.js
     async function trainModel(data) {
