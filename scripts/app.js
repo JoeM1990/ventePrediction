@@ -134,10 +134,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // Affichage des résultats avec Chart.js
     function displayResults(predictions) {
         const ctx = document.getElementById('sales-chart').getContext('2d');
-        const labels = predictions.map(p => p.date);
-        const salesData = predictions.map(p => p.sales);
     
-        new Chart(ctx, {
+        // Vérifier que l'élément canvas est présent
+        if (!ctx) {
+            console.error('Élément canvas "sales-chart" introuvable.');
+            return;
+        }
+    
+        const labels = predictions.map(p => p.date); // Les étiquettes pour l'axe des x (dates)
+        const salesData = predictions.map(p => p.sales); // Les données pour l'axe des y (ventes)
+    
+        // Détruire le graphique existant s'il y en a un (nécessaire si on redessine plusieurs fois)
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
+    
+        // Créer le graphique
+        window.myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
@@ -148,10 +161,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     borderWidth: 2,
                     fill: false
                 }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Ventes'
+                        }
+                    }
+                }
             }
         });
     
+        // const resultsSection = document.getElementById('results-section');
+        // if (resultsSection) {
+        //     resultsSection.classList.remove('hidden');
+        // } else {
+        //     console.error('Element with ID "results-section" not found.');
+        // }
     }
+    
 
     // Génération de recommandations
     function generateRecommendations(predictions) {
