@@ -26,13 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (type === 'text/csv') {
             parsedData = parseCSV(data);
         } else {
-            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
-            document.getElementById("messageModal").style.display = "block";
-
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
-
+            showAlert("Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.");
             return null;
         }
         return parsedData;
@@ -40,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fonction pour parser les données CSV
     function parseCSV(data) {
-        const lines = data.split('\n');
+        const lines = data.split('\n').filter(line => line.trim() !== '');
         const result = [];
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
@@ -49,9 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const date = row[0].trim();
                 const category = row[1].trim();
                 const product = row[2].trim();
-                const sales = parseFloat(row[3].trim()); // Utiliser parseFloat pour les valeurs de vente
+                const sales = parseFloat(row[3].trim());
 
-                // Vérifiez si les ventes sont bien un nombre
                 if (!isNaN(sales)) {
                     result.push({ date, category, product, sales });
                 } else {
@@ -84,8 +77,9 @@ document.addEventListener('DOMContentLoaded', function () {
             return null;
         }
 
-        const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
-        const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
+        // Normalisation des dates pour que les valeurs soient plus petites
+        const tensorDates = tf.tensor2d(dates.map(d => d / (1000 * 60 * 60 * 24)), [dates.length, 1], 'float32');
+        const tensorSales = tf.tensor2d(sales, [sales.length, 1], 'float32');
 
         console.log("Tensor Dates: ", tensorDates.arraySync());
         console.log("Tensor Sales: ", tensorSales.arraySync());
@@ -97,6 +91,11 @@ document.addEventListener('DOMContentLoaded', function () {
     async function trainModel(data) {
         const { tensorDates, tensorSales } = prepareData(data);
 
+        if (!tensorDates || !tensorSales) {
+            showAlert("Les données ne sont pas prêtes pour l'entraînement.");
+            return;
+        }
+
         model = tf.sequential();
         model.add(tf.layers.dense({ inputShape: [1], units: 1 }));
 
@@ -104,13 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
-        document.getElementById('infos-message').textContent = "Modèle entraîné avec succès";
-        document.getElementById("messageModal").style.display = "block";
-
-        setTimeout(function() {
-            document.getElementById("messageModal").style.display = "none";
-        }, 2000);
-
+        showAlert("Modèle entraîné avec succès");
         makePredictions(data);
     }
 
@@ -118,12 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function makePredictions(data) {
         const preparedData = prepareData(data);
         if (!preparedData) {
-            document.getElementById('infos-message').textContent = "Les données préparées sont invalides.";
-            document.getElementById("messageModal").style.display = "block";
-
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+            showAlert("Les données préparées sont invalides.");
             return;
         }
 
@@ -141,12 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
             displayResults(results);
             generateRecommendations(results);
         }).catch(error => {
-            document.getElementById('infos-message').textContent = "Erreur lors de la prédiction: " + error;
-            document.getElementById("messageModal").style.display = "block";
-
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+            showAlert("Erreur lors de la prédiction: " + error);
         });
     }
 
@@ -213,6 +196,15 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
         }
+    }
+
+    function showAlert(message) {
+        document.getElementById('infos-message').textContent = message;
+        document.getElementById("messageModal").style.display = "block";
+
+        setTimeout(function() {
+            document.getElementById("messageModal").style.display = "none";
+        }, 2000);
     }
 
     window.handleFiles = handleFiles;
