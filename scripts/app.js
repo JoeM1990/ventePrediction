@@ -154,10 +154,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales });
             });
     
-            if (predictions.some(p => isNaN(p.sales))) {
-                console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-                return;
-            }
+            // if (predictions.some(p => isNaN(p.sales))) {
+            //     console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+            //     return;
+            // }
     
             displayResults(predictions);
             generateRecommendations(predictions);
@@ -224,7 +224,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
         console.log(averageSales);
-        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${averageSales}</p>`;
+
+        
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
 
         if (averageSales < 1000) {
             recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
