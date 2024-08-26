@@ -52,14 +52,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = [];
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
-            if (row.length === 4) { // Assurez-vous qu'il y a 4 colonnes (Date, Category, Product, Sales)
+    
+            if (row.length === 4) {
                 const date = row[0].trim();
-                const sales = parseFloat(row[3].trim()); // Convertir la valeur des ventes en nombre
-                if (!isNaN(sales)) { // Vérifiez que les ventes sont bien un nombre
-                    result.push({ date: date, sales: sales });
+                const category = row[1].trim();
+                const product = row[2].trim();
+                const sales = parseFloat(row[3].trim());
+    
+                // Vérifiez si les ventes sont bien un nombre
+                if (!isNaN(sales)) {
+                    result.push({ date, category, product, sales });
                 } else {
-                    console.warn(`La ligne ${i} contient une valeur de vente invalide: ${row[3]}`);
+                    console.warn(`Valeur de vente invalide détectée dans la ligne ${i + 1}: `, row);
                 }
+            } else {
+                console.warn(`Ligne mal formatée détectée à la ligne ${i + 1}: `, row);
             }
         }
         return result;
@@ -80,6 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.warn("Données invalides détectées :", record);
             }
         });
+    
+        if (dates.length === 0 || sales.length === 0) {
+            console.error("Aucune donnée valide trouvée après la préparation des données.");
+            return null;
+        }
     
         const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
         const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
@@ -114,20 +126,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fonction de prédiction des ventes
     function makePredictions(data) {
         const predictions = [];
-        const { tensorDates } = prepareData(data);
-
+        const preparedData = prepareData(data);
+        if (!preparedData) {
+            console.error('Les données préparées sont invalides.');
+            return;
+        }
+        
+        const { tensorDates } = preparedData;
         const predictedSales = model.predict(tensorDates);
-
-       
-
+        
         predictedSales.data().then(predictedValues => {
+            console.log("Predicted Values: ", predictedValues);
+        
             predictedValues.forEach((pred, index) => {
                 predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
             });
-
+    
+            if (predictions.some(p => isNaN(p.sales))) {
+                console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+                return;
+            }
+    
             displayResults(predictions);
             generateRecommendations(predictions);
-            console.log(predictions);
         }).catch(error => {
             console.error('Erreur lors de la prédiction:', error);
         });
