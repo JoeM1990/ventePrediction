@@ -137,6 +137,7 @@ main {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     animation: slide-up 0.5s ease-in-out;
+    margin-top: 10px;
 }
 
 @keyframes slide-up {
@@ -204,3 +205,5 @@ main {
     text-decoration: none;
     cursor: pointer;
 }
+
+#results-section.hidden { display: none; }
