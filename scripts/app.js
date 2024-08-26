@@ -10,24 +10,24 @@ document.addEventListener('DOMContentLoaded', function () {
     let model;
 
     // Fonction de parsing des données CSV ou JSON
-    // function parseData(data, type) {
-    //     let parsedData;
-    //     if (type === 'application/json') {
-    //         parsedData = JSON.parse(data);
-    //     } else if (type === 'text/csv') {
-    //         parsedData = parseCSV(data);
-    //     } else {
-    //         document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
-    //         document.getElementById("messageModal").style.display = "block";
+    function parseData(data, type) {
+        let parsedData;
+        if (type === 'application/json') {
+            parsedData = JSON.parse(data);
+        } else if (type === 'text/csv') {
+            parsedData = parseCSV(data);
+        } else {
+            document.getElementById('infos-message').textContent = "Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.";
+            document.getElementById("messageModal").style.display = "block";
 
-    //         setTimeout(function() {
-    //             document.getElementById("messageModal").style.display = "none";
-    //         }, 2000);
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
 
-    //         return null;
-    //     }
-    //     return parsedData;
-    // }
+            return null;
+        }
+        return parsedData;
+    }
 
     function parseCSV(data) {
         const lines = data.split('\n');
@@ -68,31 +68,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Parsing CSV
-    function parseCSV(data) {
-        const lines = data.split('\n');
-        const result = [];
-        for (let i = 1; i < lines.length; i++) {
-            const row = lines[i].split(',');
-            if (row.length === 2) {
-                result.push({ date: row[0], sales: parseFloat(row[1]) });
-            }
-        }
-        return result;
-    }
+    // function parseCSV(data) {
+    //     const lines = data.split('\n');
+    //     const result = [];
+    //     for (let i = 1; i < lines.length; i++) {
+    //         const row = lines[i].split(',');
+    //         if (row.length === 2) {
+    //             result.push({ date: row[0], sales: parseFloat(row[1]) });
+    //         }
+    //     }
+    //     return result;
+    // }
 
     // Préparer les données pour TensorFlow.js
     function prepareData(data) {
         const dates = [];
         const sales = [];
-
+    
         data.forEach(record => {
             dates.push(new Date(record.date).getTime());
             sales.push(record.sales);
         });
-
+    
         const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
         const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
-
+    
         return { tensorDates, tensorSales };
     }
 
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('sales-chart').getContext('2d');
         const labels = predictions.map(p => p.date);
         const salesData = predictions.map(p => p.sales);
-
+    
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -150,8 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }]
             }
         });
-
-        // document.getElementById('results-section').classList.remove('hidden');
+    
     }
 
     // Génération de recommandations
