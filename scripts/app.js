@@ -103,23 +103,34 @@ document.addEventListener('DOMContentLoaded', function () {
     // Entraînement du modèle TensorFlow.js
     async function trainModel(data) {
         const { tensorDates, tensorSales } = prepareData(data);
-
+    
+        if (tensorDates.shape[0] === 0 || tensorSales.shape[0] === 0) {
+            console.error('Aucune donnée valide pour entraîner le modèle.');
+            return;
+        }
+    
         model = tf.sequential();
         model.add(tf.layers.dense({ inputShape: [1], units: 1 }));
-
+    
         model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
-
-        await model.fit(tensorDates, tensorSales, { epochs: 100 });
-
+    
+        try {
+            await model.fit(tensorDates, tensorSales, { epochs: 100 });
+        } catch (error) {
+            console.error('Erreur lors de l\'entraînement du modèle:', error);
+            return;
+        }
+    
         document.getElementById('infos-message').textContent = "Modèle entraîné avec succès";
         document.getElementById("messageModal").style.display = "block";
-
+    
         setTimeout(function() {
             document.getElementById("messageModal").style.display = "none";
         }, 2000);
-
+    
         makePredictions(data);
     }
+    
 
     // Fonction de prédiction des ventes
     function makePredictions(data) {
