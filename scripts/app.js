@@ -215,8 +215,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
         
-        predictions.forEach(e=>console.log('test: ',e.sales));
-        
         recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
 
         if (averageSales < 1000) {
