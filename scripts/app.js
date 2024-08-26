@@ -124,12 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const predictions = [];
         const preparedData = prepareData(data);
         if (!preparedData) {
-            document.getElementById('infos-message').textContent = "Les données préparées sont invalides.";
-            document.getElementById("messageModal").style.display = "block";
-    
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+           showAlert('Les données préparées sont invalides.');
             return;
         }
         
@@ -157,12 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
             displayResults(predictions);
             generateRecommendations(predictions);
         }).catch(error => {
-            document.getElementById('infos-message').textContent = "Erreur lors de la prédiction:" +error;
-            document.getElementById("messageModal").style.display = "block";
-    
-            setTimeout(function() {
-                document.getElementById("messageModal").style.display = "none";
-            }, 2000);
+           showAlert("Erreur lors de la prédiction:" + error)
         });
     }
 
