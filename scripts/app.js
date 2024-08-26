@@ -134,7 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const predictions = [];
         const preparedData = prepareData(data);
         if (!preparedData) {
-            console.error('Les données préparées sont invalides.');
+            document.getElementById('infos-message').textContent = "Les données préparées sont invalides.";
+            document.getElementById("messageModal").style.display = "block";
+    
+            setTimeout(function() {
+                document.getElementById("messageModal").style.display = "none";
+            }, 2000);
             return;
         }
         
