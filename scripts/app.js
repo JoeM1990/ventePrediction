@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     
-        // document.getElementById('results-section').classList.remove('hidden');
+        document.getElementById('results-section').classList.remove('hidden');
     }
     
     // Génération de recommandations
