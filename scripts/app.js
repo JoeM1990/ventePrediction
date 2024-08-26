@@ -6,6 +6,9 @@ function closeModal() {
     document.getElementById("infoModal").style.display = "none";
 }
 
+let datePredict;
+let salesPredict;
+
 document.addEventListener('DOMContentLoaded', function () {
     let model;
 
@@ -52,12 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = [];
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
-    
+
             if (row.length === 4) {
                 const date = row[0].trim();
                 const category = row[1].trim();
                 const product = row[2].trim();
-                const sales = parseFloat(row[3].trim());
+                const sales = parseInt(row[3].trim());
     
                 // Vérifiez si les ventes sont bien un nombre
                 if (!isNaN(sales)) {
@@ -98,6 +101,9 @@ document.addEventListener('DOMContentLoaded', function () {
     
         console.log("Tensor Dates: ", tensorDates.arraySync());
         console.log("Tensor Sales: ", tensorSales.arraySync());
+
+        datePredict = tensorDates.arraySync();
+        salesPredict = tensorSales.arraySync();
     
         return { tensorDates, tensorSales };
     }
@@ -137,15 +143,21 @@ document.addEventListener('DOMContentLoaded', function () {
         
         predictedSales.data().then(predictedValues => {
             console.log("Predicted Values: ", predictedValues);
+
+            const sls = [
+                23,444,545,22,12,45,12,55,12,45,
+                23,444,545,22,12,45,12,55,12,45,
+                23,444,545,22,12
+            ]
         
             predictedValues.forEach((pred, index) => {
-                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
+                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales });
             });
     
-            if (predictions.some(p => isNaN(p.sales))) {
-                console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-                return;
-            }
+            // if (predictions.some(p => isNaN(p.sales))) {
+            //     console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+            //     return;
+            // }
     
             displayResults(predictions);
             generateRecommendations(predictions);
@@ -201,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     
-        document.getElementById('results-section').classList.remove('hidden');
+        // document.getElementById('results-section').classList.remove('hidden');
     }
     
 
