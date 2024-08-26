@@ -154,10 +154,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales });
             });
     
-            // if (predictions.some(p => isNaN(p.sales))) {
-            //     console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-            //     return;
-            // }
+            if (predictions.some(p => isNaN(p.sales))) {
+                console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+                return;
+            }
     
             displayResults(predictions);
             generateRecommendations(predictions);
