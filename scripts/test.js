@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const tensorDates = tf.tensor2d(dates, [dates.length, 1], 'float32');
         const tensorSales = tf.tensor2d(sales, [sales.length, 1], 'float32');
 
+        console.log("Tensor Dates: ", tensorDates.arraySync());
+        console.log("Tensor Sales: ", tensorSales.arraySync());
+
         return { tensorDates, tensorSales };
     }
 
@@ -97,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
 
+        console.log("Entraînement du modèle...");
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
         showAlert("Modèle entraîné avec succès");
@@ -116,6 +120,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         predictions.array().then(predictedValues => {
             console.log("Predicted Values: ", predictedValues);
+
+            // Assurez-vous que predictedValues contient des données valides
+            if (predictedValues.length === 0 || predictedValues[0][0] === null) {
+                console.error("Les valeurs prédites sont nulles ou vides.");
+                showAlert("Erreur dans les prédictions : valeurs nulles détectées.");
+                return;
+            }
 
             const results = data.map((record, index) => ({
                 date: new Date(record.date).toLocaleDateString(),
