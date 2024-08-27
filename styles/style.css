@@ -209,3 +209,8 @@ main {
 /* #results-section.hidden { display: none; } */
 .results-pred { display: none; }
 .results-rec { display: none; }
+
+#drop-area.hover {
+    border: 2px dashed #007bff;
+    background-color: #f1f1f1;
+}
