@@ -182,9 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('sales-chart').getContext('2d');
         const labels = predictions.map(p => p.date);
         const salesData = predictions.map(p => p.sales);
-        
-        console.log('test dates: ', labels)
-        console.log('test price: ', salesData)
+        // console.log('test dates: ', labels)
+        // console.log('test price: ', salesData)
     
         new Chart(ctx, {
             type: 'line',
