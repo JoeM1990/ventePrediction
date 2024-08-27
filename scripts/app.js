@@ -31,6 +31,23 @@ document.addEventListener('DOMContentLoaded', function () {
         reader.readAsText(file);
     }
 
+    const dropArea = document.getElementById('drop-area');
+    
+    dropArea.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dropArea.classList.add('hover');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('hover');
+    });
+
+    dropArea.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dropArea.classList.remove('hover');
+        handleFiles(event.dataTransfer.files);
+    });
+
     // Fonction de parsing des données CSV ou JSON
     function parseData(data, type) {
         let parsedData;
