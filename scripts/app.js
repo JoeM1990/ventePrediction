@@ -226,7 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     
-        // document.getElementById('results-section').classList.remove('hidden');
         document.getElementById("results-pred").style.display = "block";
         document.getElementById("results-rec").style.display = "block";
 
@@ -239,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
         
-        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseInt(averageSales)}</p>`;
+        recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseFloat(averageSales.toFixed(2))}</p>`;
 
         if (averageSales < 1000) {
             recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
