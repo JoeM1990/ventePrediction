@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ]
         
             predictedValues.forEach((pred, index) => {
-                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: sls
+                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales
                  });
             });
     
