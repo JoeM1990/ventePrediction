@@ -117,7 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
         showAlert('Modèle entraîné avec succès');
-        document.getElementById("results-section").style.display = "block";
+        document.getElementById("results-pred").style.display = "block";
+        document.getElementById("results-rec").style.display = "block";
 
         
         makePredictions(data);
