@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 const product = row[2].trim();
                 const sales = parseFloat(row[3].trim());
     
-                // Vérifiez si les ventes sont bien un nombre
                 if (!isNaN(sales)) {
                     result.push({ date, category, product, sales });
                 } else {
@@ -113,8 +112,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
         const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
     
-        console.log("Tensor Dates: ", tensorDates.arraySync());
-        console.log("Tensor Sales: ", tensorSales.arraySync());
+        // console.log("Tensor Dates: ", tensorDates.arraySync());
+        // console.log("Tensor Sales: ", tensorSales.arraySync());
 
         datePredict = tensorDates.arraySync();
         salesPredict = tensorSales.arraySync();
