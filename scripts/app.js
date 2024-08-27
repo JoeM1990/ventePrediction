@@ -117,8 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
         showAlert('Modèle entraîné avec succès');
-        document.getElementById("results-pred").style.display = "block";
-        document.getElementById("results-rec").style.display = "block";
+        
 
         
         makePredictions(data);
@@ -215,7 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     
         // document.getElementById('results-section').classList.remove('hidden');
-       
+        document.getElementById("results-pred").style.display = "block";
+        document.getElementById("results-rec").style.display = "block";
 
     }
     
