@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('test price: ', salesData)
     
         new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: labels,
                 datasets: [{
