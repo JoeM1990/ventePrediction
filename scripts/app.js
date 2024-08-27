@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const date = row[0].trim();
                 const category = row[1].trim();
                 const product = row[2].trim();
-                const sales = parseInt(row[3].trim());
+                const sales = parseFloat(row[3].trim());
     
                 // Vérifiez si les ventes sont bien un nombre
                 if (!isNaN(sales)) {
@@ -146,20 +146,21 @@ document.addEventListener('DOMContentLoaded', function () {
             ]
         
             predictedValues.forEach((pred, index) => {
-                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales
+                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: sls
                  });
             });
     
-            // if (predictions.some(p => isNaN(p.sales))) {
-            //     // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-            //     showAlert("Des valeurs NaN ont été détectées dans les prédictions");
-            //     return;
-            // }
+            if (predictions.some(p => isNaN(sls))) {
+                // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+                showAlert("Des valeurs NaN ont été détectées dans les prédictions");
+                return;
+            }
     
             displayResults(predictions);
             generateRecommendations(predictions);
         }).catch(error => {
            showAlert("Erreur lors de la prédiction:" + error)
+           console.log(error);
         });
     }
 
