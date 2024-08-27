@@ -207,4 +207,5 @@ main {
 }
 
 /* #results-section.hidden { display: none; } */
-.results-section { display: none; }
+.results-pred { display: none; }
+.results-rec { display: none; }
