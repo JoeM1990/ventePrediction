@@ -211,6 +211,6 @@ main {
 .results-rec { display: none; }
 
 #drop-area.hover {
-    border: 2px dashed #007bff;
-    background-color: #f1f1f1;
+    border: 2px dashed #797c80;
+    background-color: #007bff;
 }
