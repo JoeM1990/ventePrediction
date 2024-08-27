@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const dropArea = document.getElementById('drop-area');
-    
+
     dropArea.addEventListener('dragover', (event) => {
         event.preventDefault();
         dropArea.classList.add('hover');
@@ -135,8 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         showAlert('Modèle entraîné avec succès');
         
-
-        
         makePredictions(data);
     }
 
@@ -166,11 +164,11 @@ document.addEventListener('DOMContentLoaded', function () {
                  });
             });
     
-            if (predictions.some(p => isNaN(p.sales))) {
-                // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
-                showAlert("Des valeurs NaN ont été détectées dans les prédictions");
-                return;
-            }
+            // if (predictions.some(p => isNaN(p.sales))) {
+            //     // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
+            //     showAlert("Des valeurs NaN ont été détectées dans les prédictions");
+            //     return;
+            // }
     
             displayResults(predictions);
             generateRecommendations(predictions);
