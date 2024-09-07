@@ -221,20 +221,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Génération de recommandations
-    function generateRecommendations(predictions) {
+    function generateRecommendations(predictions, data) {
         const recommendations = document.getElementById('recommendations-list');
         recommendations.innerHTML = '';
-
+    
         const averageSales = predictions.reduce((sum, p) => sum + p.sales, 0) / predictions.length;
         
         recommendations.innerHTML += `<p>Ventes moyennes prévues: ${parseFloat(averageSales.toFixed(2))}</p>`;
-
+    
         if (averageSales < 1000) {
-            recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes.</p>`;
+            recommendations.innerHTML += `<p>Recommandation: Considérez une promotion pour augmenter les ventes globales.</p>`;
         } else {
             recommendations.innerHTML += `<p>Recommandation: Les ventes sont bonnes. Maintenez votre stratégie actuelle.</p>`;
         }
+    
+        // Produits à améliorer
+        const lowSalesProducts = predictions
+            .filter((p, index) => p.sales < averageSales)
+            .map((p, index) => data[index].product);
+    
+        if (lowSalesProducts.length > 0) {
+            recommendations.innerHTML += `<p>Produits nécessitant une attention particulière : ${lowSalesProducts.join(', ')}.</p>`;
+        } else {
+            recommendations.innerHTML += `<p>Tous les produits semblent avoir des ventes satisfaisantes.</p>`;
+        }
     }
+    
 
     function showAlert(message) {
         document.getElementById('infos-message').textContent = message;
