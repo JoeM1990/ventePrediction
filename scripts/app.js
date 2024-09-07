@@ -214,9 +214,9 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 scales: {
                     x: {
-                        type: 'time', // Type de l'axe X
+                        type: 'time', 
                         time: {
-                            unit: 'day' // Unité de temps: jour
+                            unit: 'day' 
                         },
                         title: {
                             display: true,
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     y: {
-                        beginAtZero: true, // L'axe Y commence à 0
+                        beginAtZero: true,
                         title: {
                             display: true,
                             text: 'Ventes'
