@@ -150,23 +150,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const { tensorDates } = preparedData;
         const predictedSales = model.predict(tensorDates);
         
+        // predictedSales.data().then(predictedValues => {
+        //     predictedValues = predictedValues.map(v => v * maxSales); // Dénormalisation des ventes
+        //     predictedValues.forEach((pred, index) => {
+        //         predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
+        //     });
+    
+        //     if (predictions.some(p => isNaN(p.sales))) {
+        //         showAlert("Des valeurs NaN ont été détectées dans les prédictions");
+        //         return;
+        //     }
+    
+        //     displayResults(predictions);
+        //     generateRecommendations(predictions);
+        // }).catch(error => {
+        //    showAlert("Erreur lors de la prédiction:" + error)
+        //    console.log(error);
+        // });
         predictedSales.data().then(predictedValues => {
             predictedValues = predictedValues.map(v => v * maxSales); // Dénormalisation des ventes
             predictedValues.forEach((pred, index) => {
                 predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
             });
-    
+        
             if (predictions.some(p => isNaN(p.sales))) {
                 showAlert("Des valeurs NaN ont été détectées dans les prédictions");
                 return;
             }
-    
+        
             displayResults(predictions);
-            generateRecommendations(predictions);
+            generateRecommendations(predictions, data);  // Modification ici
         }).catch(error => {
-           showAlert("Erreur lors de la prédiction:" + error)
-           console.log(error);
+            showAlert("Erreur lors de la prédiction:" + error);
+            console.log(error);
         });
+        
     }
 
     // Affichage des résultats avec Chart.js
