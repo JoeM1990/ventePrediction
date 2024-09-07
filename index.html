@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,23 +8,25 @@
     <link rel="stylesheet" href="styles/style.css">
     <title>Prédiction des Ventes - Supermarché</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
 </head>
+
 <body>
     <div class="navbar">
-        <img src="assets/user.jpg" class="login-icon" alt="Login" onclick="openModal()"> 
+        <img src="assets/user.jpg" class="login-icon" alt="Login" onclick="openModal()">
     </div>
 
     <div class="container">
         <header class="header animate__zoomIn">
             <h1>Tableau de Bord de Prédiction des Ventes</h1>
         </header>
-        
+
         <main>
             <section class="file-upload">
                 <h2>Télécharger les Données de Ventes</h2>
@@ -34,21 +37,21 @@
                 </div>
             </section>
 
-            
 
-                <section class="sales-prediction results-pred" id="results-pred">
-                    <h2>Prédictions de Ventes</h2>
-                    <div id="sales-chart-container" class="animate__fadeIn">
-                        <canvas id="sales-chart" height="90px"></canvas>
-                    </div>
-                </section>
 
-                <section class="recommendations results-rec" id="results-rec">
-                    <h2>Recommandations</h2>
-                    <div id="recommendations-list" class="animate__fadeInUp"></div>
-                </section>
+            <section class="sales-prediction results-pred" id="results-pred">
+                <h2>Prédictions de Ventes</h2>
+                <div id="sales-chart-container" class="animate__fadeIn">
+                    <canvas id="sales-chart" height="90px"></canvas>
+                </div>
+            </section>
 
-            
+            <section class="recommendations results-rec" id="results-rec">
+                <h2>Recommandations</h2>
+                <div id="recommendations-list" class="animate__fadeInUp"></div>
+            </section>
+
+
         </main>
     </div>
 
@@ -56,7 +59,9 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 style="color: #007bff;">Informations sur l'application</h2>
-            <p>Elle permet aux utilisateurs de télécharger leurs propres fichiers de données, d'entraîner un modèle de machine learning en temps réel, et de visualiser les résultats pour une meilleure gestion des stocks et des ressources.</p>
+            <p>Elle permet aux utilisateurs de télécharger leurs propres fichiers de données, d'entraîner un modèle de
+                machine learning en temps réel, et de visualiser les résultats pour une meilleure gestion des stocks et
+                des ressources.</p>
             <p><a href="https://github.com/JoeM1990" target="_blank">By Joe MONKILA</a></p>
         </div>
     </div>
@@ -72,4 +77,5 @@
 
     <script src="scripts/app.js"></script>
 </body>
+
 </html>
