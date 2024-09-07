@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
             parsedData = parseCSV(data);
         } else {
            showAlert('Format de fichier non supporté. Veuillez télécharger un fichier CSV ou JSON.');
-
             return null;
         }
         return parsedData;
@@ -88,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return result;
     }
 
-
     // Préparer les données pour TensorFlow.js
     function prepareData(data) {
         const dates = [];
@@ -108,37 +106,40 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert('Aucune donnée valide trouvée après la préparation des données.');
             return null;
         }
-    
-        const tensorDates = tf.tensor2d(dates, [dates.length, 1]);
-        const tensorSales = tf.tensor2d(sales, [sales.length, 1]);
-    
-        // console.log("Tensor Dates: ", tensorDates.arraySync());
-        // console.log("Tensor Sales: ", tensorSales.arraySync());
+
+        // Normalisation des données
+        const maxDate = Math.max(...dates);
+        const maxSales = Math.max(...sales);
+
+        const tensorDates = tf.tensor2d(dates.map(d => d / maxDate), [dates.length, 1]);
+        const tensorSales = tf.tensor2d(sales.map(s => s / maxSales), [sales.length, 1]);
 
         datePredict = tensorDates.arraySync();
         salesPredict = tensorSales.arraySync();
     
-        return { tensorDates, tensorSales };
+        return { tensorDates, tensorSales, maxDate, maxSales };
     }
 
     // Entraînement du modèle TensorFlow.js
     async function trainModel(data) {
-        const { tensorDates, tensorSales } = prepareData(data);
+        const { tensorDates, tensorSales, maxDate, maxSales } = prepareData(data);
+        if (!tensorDates || !tensorSales) return;
 
         model = tf.sequential();
-        model.add(tf.layers.dense({ inputShape: [1], units: 1 }));
+        model.add(tf.layers.dense({ inputShape: [1], units: 10, activation: 'relu' }));
+        model.add(tf.layers.dense({ units: 1 }));
 
-        model.compile({ optimizer: 'sgd', loss: 'meanSquaredError' });
+        model.compile({ optimizer: 'adam', loss: 'meanSquaredError' });
 
         await model.fit(tensorDates, tensorSales, { epochs: 100 });
 
         showAlert('Modèle entraîné avec succès');
         
-        makePredictions(data);
+        makePredictions(data, maxDate, maxSales);
     }
 
     // Fonction de prédiction des ventes
-    function makePredictions(data) {
+    function makePredictions(data, maxDate, maxSales) {
         const predictions = [];
         const preparedData = prepareData(data);
         if (!preparedData) {
@@ -150,21 +151,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const predictedSales = model.predict(tensorDates);
         
         predictedSales.data().then(predictedValues => {
-            console.log("Predicted Values: ", predictedValues);
-
-            const sls = [
-                23,444,545,22,12,45,12,55,12,45,
-                23,444,545,22,12,45,12,55,12,45,
-                23,444,545,22,12
-            ]
-        
+            predictedValues = predictedValues.map(v => v * maxSales); // Dénormalisation des ventes
             predictedValues.forEach((pred, index) => {
-                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred.sales
-                 });
+                predictions.push({ date: new Date(data[index].date).toLocaleDateString(), sales: pred });
             });
     
             if (predictions.some(p => isNaN(p.sales))) {
-                // console.warn("Des valeurs NaN ont été détectées dans les prédictions.");
                 showAlert("Des valeurs NaN ont été détectées dans les prédictions");
                 return;
             }
@@ -182,9 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('sales-chart').getContext('2d');
         const labels = predictions.map(p => p.date);
         const salesData = predictions.map(p => p.sales);
-        console.log('test dates: ', labels)
-        console.log('test price: ', salesData)
-    
+
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -200,9 +190,9 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 scales: {
                     x: {
-                        type: 'time', 
+                        type: 'time',
                         time: {
-                            unit: 'day', 
+                            unit: 'day',
                         },
                         title: {
                             display: true,
@@ -228,9 +218,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
         document.getElementById("results-pred").style.display = "block";
         document.getElementById("results-rec").style.display = "block";
-
     }
-    
+
     // Génération de recommandations
     function generateRecommendations(predictions) {
         const recommendations = document.getElementById('recommendations-list');
@@ -258,4 +247,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.handleFiles = handleFiles;
 });
-
