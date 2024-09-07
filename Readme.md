@@ -2,6 +2,7 @@
 
 Ce projet est une plateforme intelligente de prise de décision et de prédictions des ventes au sein d’un supermarché. Elle utilise **TensorFlow.js** pour l'apprentissage automatique, ainsi que **HTML**, **CSS**, et **JavaScript** pour le front-end. Les utilisateurs peuvent télécharger des fichiers CSV ou JSON via une interface de glisser-déposer intuitive pour effectuer des prédictions de ventes basées sur leurs données historiques.
 
+
 ## Fonctionnalités
 
 - **Chargement des Données** : Téléchargez des fichiers CSV ou JSON contenant des données de ventes historiques via une interface de glisser-déposer.
@@ -9,12 +10,14 @@ Ce projet est une plateforme intelligente de prise de décision et de prédictio
 - **Visualisation des Données** : Affichez les résultats sous forme de graphiques interactifs.
 - **Recommandations de Stratégie** : Obtenez des recommandations basées sur les prédictions de ventes.
 
+
 ## Technologies Utilisées
 
 - **TensorFlow.js** : Pour l'entraînement des modèles d'apprentissage automatique et les prédictions en temps réel.
 - **HTML5** et **CSS3** : Pour la structure de la page et le design visuel.
 - **JavaScript** : Pour les interactions utilisateur, la manipulation des fichiers, et l'intégration avec TensorFlow.js.
 - **Chart.js** : Pour la visualisation des données de prédiction.
+
 
 ## Installation
 
@@ -34,6 +37,7 @@ Pour utiliser cette plateforme en local, suivez ces étapes :
     ```
 
 Aucune installation de dépendances n'est requise, car le projet utilise des CDN pour les bibliothèques externes.
+
 
 ## Utilisation
 
@@ -56,6 +60,5 @@ Les contributions sont les bienvenues ! Si vous avez des idées pour améliorer 
 ## Auteur
 
 Ce projet a été créé par [Joe Monkila](https://github.com/JoeM1990).
-
 
 
