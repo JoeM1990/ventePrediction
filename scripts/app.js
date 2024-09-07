@@ -190,10 +190,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Affichage des résultats avec Chart.js
     function displayResults(predictions) {
         const ctx = document.getElementById('sales-chart').getContext('2d');
-        const labels = predictions.map(p => p.date); // Dates des prédictions
-        const salesData = predictions.map(p => p.sales); // Ventes prédites
+        const labels = predictions.map(p => p.date); 
+        const salesData = predictions.map(p => p.sales); 
     
-        // Détruire l'ancien graphique avant d'en créer un nouveau pour éviter les erreurs
         if (window.salesChart) {
             window.salesChart.destroy();
         }
