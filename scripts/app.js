@@ -199,16 +199,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     
         window.salesChart = new Chart(ctx, {
-            type: 'line', // Type courbe
+            type: 'line', 
             data: {
-                labels: labels, // Dates en axe X
+                labels: labels, 
                 datasets: [{
                     label: 'Prédictions de Ventes',
-                    data: salesData, // Ventes prédites en axe Y
-                    borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la courbe
+                    data: salesData, 
+                    borderColor: 'rgba(75, 192, 192, 1)', 
                     borderWidth: 2,
-                    fill: false, // Désactiver le remplissage sous la courbe
-                    tension: 0.4 // Ajout de tension pour courber la ligne
+                    fill: false,
+                    tension: 0.4 
                 }]
             },
             options: {
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 },
                 responsive: true,
-                maintainAspectRatio: false // Pour ajuster le graphique selon la taille du conteneur
+                maintainAspectRatio: false 
             }
         });
     
