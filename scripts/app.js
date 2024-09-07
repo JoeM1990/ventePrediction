@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
             displayResults(predictions);
-            generateRecommendations(predictions, data);  // Modification ici
+            generateRecommendations(predictions, data); 
         }).catch(error => {
             showAlert("Erreur lors de la prédiction:" + error);
             console.log(error);
