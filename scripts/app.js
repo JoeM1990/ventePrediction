@@ -204,12 +204,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: labels, 
                 datasets: [{
                     label: 'Prédictions de Ventes',
-                    data: salesData, 
-                    borderColor: 'rgba(75, 192, 192, 1)', 
+                    data: salesData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 2,
-                    fill: false,
-                    tension: 0.4 
+                    fill: true, // Active le remplissage sous la courbe
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Ajoute une couleur de fond sous la courbe
+                    tension: 0.4
                 }]
+                
             },
             options: {
                 scales: {
