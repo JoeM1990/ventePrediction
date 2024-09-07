@@ -190,27 +190,33 @@ document.addEventListener('DOMContentLoaded', function () {
     // Affichage des résultats avec Chart.js
     function displayResults(predictions) {
         const ctx = document.getElementById('sales-chart').getContext('2d');
-        const labels = predictions.map(p => p.date);
-        const salesData = predictions.map(p => p.sales);
-
-        new Chart(ctx, {
-            type: 'line',
+        const labels = predictions.map(p => p.date); // Dates des prédictions
+        const salesData = predictions.map(p => p.sales); // Ventes prédites
+    
+        // Détruire l'ancien graphique avant d'en créer un nouveau pour éviter les erreurs
+        if (window.salesChart) {
+            window.salesChart.destroy();
+        }
+    
+        window.salesChart = new Chart(ctx, {
+            type: 'line', // Type courbe
             data: {
-                labels: labels,
+                labels: labels, // Dates en axe X
                 datasets: [{
                     label: 'Prédictions de Ventes',
-                    data: salesData,
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: salesData, // Ventes prédites en axe Y
+                    borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la courbe
                     borderWidth: 2,
-                    fill: false
+                    fill: false, // Désactiver le remplissage sous la courbe
+                    tension: 0.4 // Ajout de tension pour courber la ligne
                 }]
             },
             options: {
                 scales: {
                     x: {
-                        type: 'time',
+                        type: 'time', // Type de l'axe X
                         time: {
-                            unit: 'day',
+                            unit: 'day' // Unité de temps: jour
                         },
                         title: {
                             display: true,
@@ -218,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     },
                     y: {
-                        beginAtZero: true,
+                        beginAtZero: true, // L'axe Y commence à 0
                         title: {
                             display: true,
                             text: 'Ventes'
@@ -230,13 +236,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         display: true,
                         position: 'top'
                     }
-                }
+                },
+                responsive: true,
+                maintainAspectRatio: false // Pour ajuster le graphique selon la taille du conteneur
             }
         });
     
+        // Affichage des résultats
         document.getElementById("results-pred").style.display = "block";
         document.getElementById("results-rec").style.display = "block";
     }
+    
 
     // Génération de recommandations
     function generateRecommendations(predictions, data) {
