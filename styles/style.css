@@ -219,3 +219,7 @@ main {
     border: 2px dashed #007bff;
     background-color: #b3b2b2;
 }
+
+p{
+    text-align: justify;
+}
