@@ -185,6 +185,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const labels = predictions.map(p => p.date); 
         const salesData = predictions.map(p => p.sales); 
     
+        console.log('Date : ' , labels);
+        console.log('Donnees : ' , salesData);
+
         if (window.salesChart) {
             window.salesChart.destroy();
         }
@@ -207,17 +210,13 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 scales: {
                     x: {
-                        type: 'time', 
-                        time: {
-                            unit: 'day' 
-                        },
                         title: {
                             display: true,
                             text: 'Date'
                         }
                     },
                     y: {
-                        beginAtZero: true,
+                        beginAtZero: false,
                         title: {
                             display: true,
                             text: 'Ventes'
