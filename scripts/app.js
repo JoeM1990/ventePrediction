@@ -181,9 +181,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Affichage des résultats avec Chart.js
     function displayResults(predictions) {
-        const ctx = document.getElementById('sales-chart').getContext('2d');
-        const labels = predictions.map(p => p.date); 
-        const salesData = predictions.map(p => p.sales); 
+        // const ctx = document.getElementById('sales-chart').getContext('2d');
+        // const labels = predictions.map(p => p.date); 
+        // const salesData = predictions.map(p => p.sales); 
+
+        const values = predictions.map(p => ({
+            x: p.date,
+            y: p.sales,
+          }));
 
         tfvis.render.scatterplot(
             {name: 'Prédictions de Ventes'},
