@@ -8,6 +8,14 @@ function closeModal() {
     document.getElementById("infoModal").style.display = "none";
 }
 
+function openStoryModal() {
+    document.getElementById("stotyModal").style.display = "block";
+}
+
+function closeStoryModal() {
+    document.getElementById("storyModal").style.display = "none";
+}
+
 let datePredict;
 let salesPredict;
 
