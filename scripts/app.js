@@ -184,6 +184,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const ctx = document.getElementById('sales-chart').getContext('2d');
         const labels = predictions.map(p => p.date); 
         const salesData = predictions.map(p => p.sales); 
+
+        tfvis.render.scatterplot(
+            {name: 'Prédictions de Ventes'},
+            {values},
+            {
+              xLabel: 'Dates',
+              yLabel: 'Ventes',
+              height: 300
+            }
+          );
     
         // if (window.salesChart) {
         //     window.salesChart.destroy();
