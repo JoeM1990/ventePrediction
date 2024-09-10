@@ -185,55 +185,55 @@ document.addEventListener('DOMContentLoaded', function () {
         const labels = predictions.map(p => p.date); 
         const salesData = predictions.map(p => p.sales); 
     
-        if (window.salesChart) {
-            window.salesChart.destroy();
-        }
+        // if (window.salesChart) {
+        //     window.salesChart.destroy();
+        // }
     
-        window.salesChart = new Chart(ctx, {
-            type: 'line', 
-            data: {
-                labels: labels, 
-                datasets: [{
-                    label: 'Prédictions de Ventes',
-                    data: salesData,
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    fill: true, // Active le remplissage sous la courbe
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Ajoute une couleur de fond sous la courbe
-                    tension: 0.4
-                }]
+        // window.salesChart = new Chart(ctx, {
+        //     type: 'line', 
+        //     data: {
+        //         labels: labels, 
+        //         datasets: [{
+        //             label: 'Prédictions de Ventes',
+        //             data: salesData,
+        //             borderColor: 'rgba(75, 192, 192, 1)',
+        //             borderWidth: 2,
+        //             fill: true, // Active le remplissage sous la courbe
+        //             backgroundColor: 'rgba(75, 192, 192, 0.2)', // Ajoute une couleur de fond sous la courbe
+        //             tension: 0.4
+        //         }]
                 
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time', 
-                        time: {
-                            unit: 'day' 
-                        },
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Ventes'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: false 
-            }
-        });
+        //     },
+        //     options: {
+        //         scales: {
+        //             x: {
+        //                 type: 'time', 
+        //                 time: {
+        //                     unit: 'day' 
+        //                 },
+        //                 title: {
+        //                     display: true,
+        //                     text: 'Date'
+        //                 }
+        //             },
+        //             y: {
+        //                 beginAtZero: true,
+        //                 title: {
+        //                     display: true,
+        //                     text: 'Ventes'
+        //                 }
+        //             }
+        //         },
+        //         plugins: {
+        //             legend: {
+        //                 display: true,
+        //                 position: 'top'
+        //             }
+        //         },
+        //         responsive: true,
+        //         maintainAspectRatio: false 
+        //     }
+        // });
     
         // Affichage des résultats
         document.getElementById("results-pred").style.display = "block";
