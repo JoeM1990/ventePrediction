@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     
         window.salesChart = new Chart(ctx, {
-            type: '', 
+            type: 'line', 
             data: {
                 labels: labels, 
                 datasets: [{
