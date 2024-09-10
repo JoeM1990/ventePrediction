@@ -1,21 +1,5 @@
 /* Author: Jonathan Monkila */
 
-function openModal() {
-    document.getElementById("infoModal").style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById("infoModal").style.display = "none";
-}
-
-function openStoryModal() {
-    document.getElementById("stotyModal").style.display = "block";
-}
-
-function closeStoryModal() {
-    document.getElementById("storyModal").style.display = "none";
-}
-
 let datePredict;
 let salesPredict;
 
@@ -296,3 +280,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.handleFiles = handleFiles;
 });
+
+function openModal() {
+    document.getElementById("infoModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("infoModal").style.display = "none";
+}
+
+function openStoryModal() {
+    document.getElementById("stotyModal").style.display = "block";
+}
+
+function closeStoryModal() {
+    document.getElementById("storyModal").style.display = "none";
+}
