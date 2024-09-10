@@ -290,7 +290,7 @@ function closeModal() {
 }
 
 function openStoryModal() {
-    document.getElementById("stotyModal").style.display = "block";
+    document.getElementById("storyModal").style.display = "block";
 }
 
 function closeStoryModal() {
