@@ -1,4 +1,6 @@
-/* Author: Jonathan Monkila */
+/**
+ * @author Joe Monkila
+ */
 
 let datePredict;
 let salesPredict;
